@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title_block %}
+    Hello!
+{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <p><a href="{% url 'social:begin' 'twitter' %}">Twitter</a></p>
+    </div>
+{% endblock %}
