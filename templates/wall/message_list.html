@@ -39,6 +39,7 @@
                             <div class="msg-date">{{ msg.message.created }}</div>
                         </div>
                         <div class="msg-text">{{ msg.message.text }}</div>
+                        {% if user.is_authenticated %}
                         <form method="post" class="comm-form form-inline" action="{% url 'comment_create' %}">{% csrf_token %}
                             <input type="text" name="text" id="com-msg-{{ msg.message.id }}" class="form-control" placeholder="Type comment" value="{{ text|default:'' }}" required>
                             <input type="hidden" name="parent" value="">
@@ -46,6 +47,11 @@
                             <input type="hidden" name="message" value="{{ msg.message.id }}">
                             <input type="submit" class="btn btn-success">
                         </form>
+                        {% else %}
+                            <div class="comm-form">
+                                <p>For sending comment please <a href="{% url 'login' %}">login</a></p>
+                            </div>
+                        {% endif %}
                     </div>
                         <ul>
                         {% recursetree msg.comment %}
@@ -55,6 +61,7 @@
                                     <div class="msg-author">{{ node.user }}</div>
                                 </div>
                                 <div class="msg-text">{{ node.text }}</div>
+                                {% if user.is_authenticated %}
                                 <form method="post" class="form-inline comm-form" action="{% url 'comment_create' %}">{% csrf_token %}
                                     <input type="text" name="text" id="com-com-{{ node.id }}" class="form-control" placeholder="Type comment" value="{{ text|default:'' }}" required>
                                     <input type="hidden" name="parent" value="{{ node.id }}">
@@ -62,6 +69,11 @@
                                     <input type="hidden" name="message" value="{{ msg.message.id }}">
                                     <input type="submit" class="btn btn-success">
                                 </form>
+                                {% else %}
+                                    <div class="comm-form">
+                                        <p>For sending comment please <a href="{% url 'login' %}">login</a></p>
+                                    </div>
+                                {% endif %}
                                 {% if not node.is_leaf_node %}
                                     <ul class="children">
                                         {{ children }}
