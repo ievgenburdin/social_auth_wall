@@ -84,7 +84,6 @@
                 $('.comm-form').remove();
                 var msg_id = $(this).parent().children('.msg-id').text();
                 var comm_id = $(this).parent().children('.comm-id').text();
-                console.log(comm_id);
 
                 var form = "{% if user.is_authenticated %}\n"+
                 "                        <form method=\"post\" class=\"comm-form form-inline\" action=\"{% url 'comment_create' %}\">{% csrf_token %}\n"
