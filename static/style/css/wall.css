@@ -28,7 +28,13 @@ body {
   overflow: hidden;
   text-align: right;
   vertical-align: top;
-  cursor: pointer;
+
+}
+.msg-id{
+  display: none;
+}
+.comm-id{
+  display: none;
 }
 li {
     list-style-type: none;
@@ -64,6 +70,14 @@ li {
 .children{
   margin-left: 10px;
 }
+.comm-btn{
+  cursor: pointer;
+  font-size: 15px;
+}
+.comm-form{
+  font-size: 15px;
+}
+
 
 
 
