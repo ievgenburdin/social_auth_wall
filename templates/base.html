@@ -34,8 +34,8 @@
         <a class="navbar-brand" href="#">Social Auth Test</a>
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="{% url 'wall' %}">Wall<span class="sr-only">{% if page_name == 'wall' %}(current){% endif %}</span></a>
+          <li class="nav-item {% if page_name == 'wall' %}active{% endif %}">
+            <a class="nav-link" href="{% url 'wall' %}">Wall<span class="sr-only"></span></a>
           </li>
           {% if user.is_authenticated %}
             <li class="nav-item dropdown">
@@ -49,7 +49,6 @@
                 <a class="nav-link" href="{% url 'login' %}">Login</a>
             </li>
           {% endif %}
-
         </ul>
       </div>
     </nav>
@@ -72,7 +71,7 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="{% static '/js/ie10-viewport-bug-workaround.js' %}"></script>
     {% block js_block %}
-    
+
     {% endblock %}
 
 </body>

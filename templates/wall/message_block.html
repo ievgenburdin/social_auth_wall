@@ -1,39 +1,53 @@
 {% load staticfiles %}
 {% load mptt_tags %}
-{% if messages %}
-    {% for msg in messages %}
-        <div class="msg">
-            <div class="msg-item" >
-                <div class="msg-id">{{ msg.message.id }}</div>
-                <div class="msg-info">
-                    <div class="msg-author">{{ msg.message.user }}</div>
-                    <div class="msg-date">{{ msg.message.created }}</div>
-                </div>
-                <div class="msg-text">{{ msg.message.text }}</div>
-                <div class="comm-btn"><u>Add comment</u></div>
-            </div>
-            <ul>
-                {% recursetree msg.comment %}
-                    <li class="com-item">
-                        <div class="msg-id">{{ node.message.id }}</div>
-                        <div class="comm-id">{{ node.id }}</div>
-                        <div class="msg-info">
-                            <div class="msg-date">{{ node.created }}</div>
-                            <div class="msg-author">{{ node.user }}</div>
-                        </div>
-                        <div class="msg-text">{{ node.text }}</div>
-                        <div class="comm-btn"><u>Add comment</u></div>
-                        {% if not node.is_leaf_node %}
-                            <ul class="children">
-                                {{ children }}
-                            </ul>
+
+{% block message_list %}
+    {% if messages %}
+        {% for msg in messages %}
+            <div class="msg">
+                <div class="msg-item" >
+                    <div class="msg-id">{{ msg.message.id }}</div>
+                    <div class="msg-info">
+                        <div class="msg-author">{{ msg.message.user }}</div>
+                        <div class="msg-date">{{ msg.message.created }}</div>
+                    </div>
+                    <div class="msg-text">{{ msg.message.text }}</div>
+                    <div class="comm-btn"><u>Add comment</u></div>
+                    {% if user.is_authenticated %}
+                        {% if msg.message.user == user %}
+                            <div class="change-msg-btn"><u>Change</u></div>
                         {% endif %}
-                    </li>
-                {% endrecursetree %}
-            </ul>
-        </div>
-    {% endfor %}
-{% endif %}
+                    {% endif %}
+                </div>
+                <ul>
+                    {% recursetree msg.comment %}
+                        <li class="com-item">
+                            <div class="msg-id">{{ node.message.id }}</div>
+                            <div class="comm-id">{{ node.id }}</div>
+                            <div class="msg-info">
+                                <div class="msg-date">{{ node.created }}</div>
+                                <div class="msg-author">{{ node.user }}</div>
+                            </div>
+                            <div class="msg-text">{{ node.text }}</div>
+                            <div class="comm-btn"><u>Add comment</u></div>
+                            {% if user.is_authenticated %}
+                                {% if node.user == user %}
+                                    <div class="change-btn"><u>Change</u></div>
+                                {% endif %}
+                            {% endif %}
+                            {% if not node.is_leaf_node %}
+                                <ul class="children">
+                                    {{ children }}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    {% endrecursetree %}
+                </ul>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
 {% if page.has_next %}
     <div class="page-number d-none">{{ page.next_page_number }}</div>
 {% else %}

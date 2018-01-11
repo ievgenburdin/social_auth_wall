@@ -15,6 +15,16 @@ class MessageForm(forms.ModelForm):
         user = User.objects.get(username=self.cleaned_data.get('user', None))
         return user
 
+class MessageChangeForm(MessageForm):
+    id = forms.CharField()
+
+    def save(self, *args, **kwargs):
+        msg = Message.objects.get(id=self.cleaned_data.get('id', None))
+        if msg:
+            msg.text = self.cleaned_data.get('text', None)
+        msg.save()
+
+
 
 class CommentForm(forms.ModelForm):
     text = forms.CharField()
@@ -40,6 +50,15 @@ class CommentForm(forms.ModelForm):
         else:
             parent = Comment.objects.get(id=self.cleaned_data.get('parent', None))
         return parent
+
+class CommentChangeForm(CommentForm):
+    id = forms.CharField()
+
+    def save(self, *args, **kwargs):
+        comm = Comment.objects.get(id=self.cleaned_data.get('id', None))
+        if comm:
+            comm.text = self.cleaned_data.get('text', None)
+        comm.save()
 
 
 

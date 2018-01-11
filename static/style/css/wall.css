@@ -70,7 +70,8 @@ li {
 .children{
   margin-left: 10px;
 }
-.comm-btn{
+.comm-btn, .change-btn,
+.change-msg-btn, .show-all-btn{
   cursor: pointer;
   font-size: 15px;
 }
