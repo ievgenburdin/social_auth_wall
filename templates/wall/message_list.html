@@ -18,7 +18,7 @@
                 <label for="message_input">Type message</label>
                 <textarea required name="text" id="message_input" class="form-control mb-2" rows="3">{{ text|default:"" }}</textarea>
                 <input type="hidden" name="user" value="{{ user }}">
-                <input type="submit" class="btn btn-success mb-2">
+                <input type="submit" class="btn btn-success mb-2" value="Send">
             </form>
         {% else %}
             <div class="row justify-content-center"><p>For sending messages please <a href="{% url 'login' %}">login</a></p></div>
@@ -150,7 +150,7 @@
                     "                <textarea required name=\"text\" id=\"message_input\" class=\"form-control mb-2\" rows=\"3\">" + msg_text + "</textarea>\n" +
                     "                <input type=\"hidden\" name=\"user\" value=\"{{ user }}\">\n" +
                     "                <input type=\"hidden\" name=\"id\" value=" + msg_id + ">\n" +
-                    "                <input type=\"submit\" class=\"btn btn-success mb-2\">\n" +
+                    "                <input type=\"submit\" class=\"btn btn-success mb-2\" value=\"Send\">\n" +
                     "                <input type=\"button\" class=\"btn-cancel btn btn-secondary mb-2\" value=\"Cancel\">\n"+
                     "            </form>";
 
