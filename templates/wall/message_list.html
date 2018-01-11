@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 {% load mptt_tags %}
 
 {% block title_block %}
@@ -7,18 +8,6 @@
 
 {% block content %}
     <div class="starter-template">
-        <ul class="pagination justify-content-center">
-            {% if page.has_previous %}
-                <li class="page-item"><a class="page-link" href="?page=1">&laquo;</a></li>
-                <li class="page-item"><a class="page-link" href="?page={{ page.previous_page_number }}">Previous</a></li>
-            {% endif %}
-            <li class="page-item"><a class="page-link" href="?page={{ page.number }}">Page {{ page.number }} of {{ page.paginator.num_pages }}</a></li>
-            {% if page.has_next %}
-                <li class="page-item"><a class="page-link" href="?page={{ page.next_page_number }}">Next</a></li>
-                <li class="page-item"><a class="page-link" href="?page={{ page.paginator.num_pages }}">&raquo;</a></li>
-            {% endif %}
-        </ul>
-
         {% if user.is_authenticated %}
             <form method="post" class="msg-form" action="{% url 'message_create' %}">{% csrf_token %}
                 {{ form.errors }}
@@ -64,23 +53,65 @@
                 </div>
             {% endfor %}
         {% endif %}
+        <div class="page-number d-none">{{ page.next_page_number }}</div>
     </div>
-    
+        <p id="loading">
+            <img src="{% static 'style/images/Spinner.gif' %}" alt="Loading…" />
+        </p>
 {% endblock %}
 
 {% block js_block %}
     <script type="text/javascript">
-
         $(document).ready(function(){
-            /*    $('.comm-form').hide();
+            var csrftoken = getCookie('csrftoken');
 
-            $('.msg-text').click(function(){
-                $(this).next().toggle()});
-            });*/
-            var comm_btn = $('.comm-btn');
+            init_comment();
+
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
 
 
-            comm_btn.click(function() {
+            var win = $(window);
+
+            win.scroll(function() {
+                if ($(document).height() - win.height() == win.scrollTop()) {
+                    $('#loading').show();
+                    var num_page = $('.page-number');
+                    num_page.remove();
+                    console.log(num_page);
+                    $.ajax({
+                    url: '{% url 'next_page' %}',
+                    method: 'POST',
+                    data: {"page": num_page.text()},
+                    dataType: 'html',
+                    success: function(resp) {
+                        console.log(resp);
+                        $('.starter-template').append(resp);
+                        $('#loading').hide();
+                        init_comment();
+                        }
+                    });
+                }
+            });
+
+            var csrftoken = getCookie('csrftoken');
+
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+        });
+
+        function init_comment() {
+            $('.comm-btn').click(function() {
                 $('.comm-form').remove();
                 var msg_id = $(this).parent().children('.msg-id').text();
                 var comm_id = $(this).parent().children('.comm-id').text();
@@ -111,8 +142,28 @@
                 });
                 $(this).hide();
             });
+        }
 
-        });
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
     </script>
 {% endblock %}
 

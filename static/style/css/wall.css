@@ -78,6 +78,10 @@ li {
   font-size: 15px;
 }
 
+#loading {
+    display: none;
+    text-align: center;
+}
 
 
 
