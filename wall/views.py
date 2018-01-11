@@ -9,7 +9,7 @@ from wall.forms import MessageForm, CommentForm, MessageChangeForm, CommentChang
 class Wall(ListView):
     template_name = 'wall/message_list.html'
     queryset = Message.objects.all().order_by('created')
-    paginate_by = 1
+    paginate_by = 5
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -75,7 +75,7 @@ class CommentChange(FormView):
 
 
 class NextPage(View):
-    paginate_by = 1
+    paginate_by = 3
 
     def post(self, request):
         num_page = request.POST.get('page', 1)
